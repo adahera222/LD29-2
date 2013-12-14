@@ -13,7 +13,7 @@ import flash.Lib;
  */
 class Main extends Sprite 
 {
-	public static var m;
+	public static var m:Main;
 	var inited:Bool;
 	/* ENTRY POINT */
 	var _deltaTime = 0.0;
@@ -21,7 +21,7 @@ class Main extends Sprite
 	var _speed = 1000 / 40;
 	public static var animating = false;
 	
-	public var objects:Array<Bitmap>;
+	public var objects:Array<Object_>;
 	public var blocks:Array<Block>;
 
 	function onEnterFrame(e) {
@@ -35,6 +35,10 @@ class Main extends Sprite
 		{
 			block.update(delta);
 		}
+		for (object in objects)
+		{
+			object.update(delta);
+		}
 	}
 
 	function resize(e) 
@@ -42,12 +46,14 @@ class Main extends Sprite
 		if (!inited) init();
 		// else (resize or orientation change)
 	}
-	function onMouseDown(e:MouseEvent)
+	function onMouseDown(e:MouseEvent) 
 	{
 		//bitmap.x = e.localX;
 		//bitmap.y = e.localY;
 		var row = Math.floor((e.localY) / Block.size);
-		var end = Board.d[0][row];
+		var column = Math.floor((e.localX) / Block.size);
+		Main.removeBlock(Board.d[column][row]);
+		/*var end = Board.d[0][row];
 		for (i in 0...Board.w-1)
 			if (Board.d[i][row] != null)
 			{
@@ -56,7 +62,7 @@ class Main extends Sprite
 			}
 		Board.d[Board.w - 1][row] = end;
 		end.x = Board.w*Block.size;
-		end.tx = end.x-Block.size;
+		end.tx = end.x-Block.size;*/
 	}
 	function onKeyDown(e:KeyboardEvent)
 	{
@@ -70,6 +76,14 @@ class Main extends Sprite
 		
 		b.place();
 	}
+	public static function removeBlock(b:Block)
+	{
+		if (b == null)
+		return;
+		
+		m.removeChild(b);
+		m.blocks.remove(b);
+	}
 	function init() 
 	{
 		if (inited) return;
@@ -77,8 +91,9 @@ class Main extends Sprite
 		_lastTime = Lib.getTimer();
 		Board.initBoard(8, 12);
 		Board.makeRegularBoard(8, 4);
-		y = 5 * 48;
+		y = 4 * 48;
 		x = 48;
+		objects.push(new Gravity(0, 1));
 		// (your code here)
 		
 		// Stage:
@@ -96,7 +111,7 @@ class Main extends Sprite
 	{
 		super();	
 		blocks = new Array<Block>();
-		objects = new Array<Bitmap>();
+		objects = new Array<Object_>();
 		Main.m = this;
 		addEventListener(Event.ADDED_TO_STAGE, added);
 	}

@@ -28,8 +28,8 @@ class Board
 	{
 		for (i in 0...w)
 		{
-			var j = Board.h - 1;
-			while (j-->=Board.h - h)
+			var j = Board.h;
+			while (--j>=Board.h - h)
 			{
 				var b=null;
 				while (b==null)
@@ -69,5 +69,11 @@ class Board
 				
 			}
 		}
+	}
+	public static function isIn(X:Int, Y:Int):Bool
+	{
+		if (X >= 0 && X < Board.w && Y >= 0 && Y < Board.h)
+		return true;
+		return false;
 	}
 }

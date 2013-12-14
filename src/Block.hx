@@ -34,10 +34,16 @@ class Block extends Bitmap
 	}
 	public function place()
 	{
-		X = Math.floor((x+size/2) / size);
-		Y = Math.floor((y + size / 2) / size);//yay strong static typing!!!!
-		if(X>=0 && X<Board.w && Y>=0 && Y<Board.h)
-			Board.d[X][Y] = this;
+		var oldX = X;
+		var oldY = Y;
+		X = Math.floor((tx+size/2) / size);
+		Y = Math.floor((ty + size / 2) / size);//yay strong static typing!!!!
+		if (x != oldX || y != oldY)
+		{
+			Board.d[oldX][oldY] = null;
+			if (Board.isIn(X, Y))
+				Board.d[X][Y] = this;
+		}
 	}
 	public function update(delta:Float)
 	{

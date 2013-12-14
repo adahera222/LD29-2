@@ -30,12 +30,13 @@ class Gravity extends Object_
 						var nx = Math.floor(b.X + vx);
 						var ny = Math.floor(b.Y + vy);
 						if(Board.isIn(nx,ny))
-						if (Board.d[nx][ny] == null)
-						{
-							b.tx = nx * Block.size;
-							b.ty = ny * Block.size;
-							b.place();
-						}
+							if (Board.d[nx][ny] == null)
+							{
+								b.tx = nx * Block.size;
+								b.ty = ny * Block.size;
+								b.place();
+								Main.animating = true;
+							}
 					}
 				}
 			}

@@ -14,7 +14,7 @@ class Block extends Bitmap
 	public var ty:Float;
 	public static var primed:Array<Block>;
 	public static var size = 48;
-	public var speed = 10.0;
+	public var speed = 1.0;
 	public function new(_X:Int,_Y:Int,data:BitmapData=null) 
 	{
 		if (data == null)
@@ -38,7 +38,7 @@ class Block extends Bitmap
 		var oldY = Y;
 		X = Math.floor((tx+size/2) / size);
 		Y = Math.floor((ty + size / 2) / size);//yay strong static typing!!!!
-		if (x != oldX || y != oldY)
+		//if (X != oldX || Y != oldY)
 		{
 			Board.d[oldX][oldY] = null;
 			if (Board.isIn(X, Y))

@@ -19,4 +19,9 @@ class RBlock extends Block
 		var rb = cast(b, RBlock);
 		return rb.type == type;
 	}
+	override public function adjacentBlockChanged(block:Block) 
+	{
+		super.adjacentBlockChanged(block);
+		
+	}
 }

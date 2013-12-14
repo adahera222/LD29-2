@@ -29,7 +29,7 @@ class Board
 		for (i in 0...w)
 		{
 			var j = Board.h - 1;
-			while (j-->Board.h - h)
+			while (j-->=Board.h - h)
 			{
 				var b=null;
 				while (b==null)

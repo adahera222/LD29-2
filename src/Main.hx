@@ -19,7 +19,9 @@ class Main extends Sprite
 	var _deltaTime = 0.0;
 	var _lastTime=0.0;
 	var _speed = 1000 / 40;
+	public static var animating = false;
 	
+	public var objects:Array<Bitmap>;
 	public var blocks:Array<Block>;
 
 	function onEnterFrame(e) {
@@ -28,6 +30,7 @@ class Main extends Sprite
 		_deltaTime += delta - _speed;
 		_lastTime = now;
 		Board.clear();
+		animating = false;
 		for (block in blocks)
 		{
 			block.update(delta);
@@ -43,6 +46,17 @@ class Main extends Sprite
 	{
 		//bitmap.x = e.localX;
 		//bitmap.y = e.localY;
+		var row = Math.floor((e.localY) / Block.size);
+		var end = Board.d[0][row];
+		for (i in 0...Board.w-1)
+			if (Board.d[i][row] != null)
+			{
+				Board.d[i][row] = Board.d[i + 1][row];
+				Board.d[i][row].tx -= Block.size;
+			}
+		Board.d[Board.w - 1][row] = end;
+		end.x = Board.w*Block.size;
+		end.tx = end.x-Block.size;
 	}
 	function onKeyDown(e:KeyboardEvent)
 	{
@@ -63,6 +77,8 @@ class Main extends Sprite
 		_lastTime = Lib.getTimer();
 		Board.initBoard(8, 12);
 		Board.makeRegularBoard(8, 4);
+		y = 5 * 48;
+		x = 48;
 		// (your code here)
 		
 		// Stage:
@@ -80,6 +96,7 @@ class Main extends Sprite
 	{
 		super();	
 		blocks = new Array<Block>();
+		objects = new Array<Bitmap>();
 		Main.m = this;
 		addEventListener(Event.ADDED_TO_STAGE, added);
 	}

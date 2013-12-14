@@ -10,8 +10,11 @@ class Block extends Bitmap
 {
 	public var X:Int;
 	public var Y:Int;
-	static var primed:Array<Block>;
-	static var size = 40;
+	public var tx:Float;
+	public var ty:Float;
+	public static var primed:Array<Block>;
+	public static var size = 48;
+	public var speed = 10.0;
 	public function new(_X:Int,_Y:Int,data:BitmapData=null) 
 	{
 		if (data == null)
@@ -21,6 +24,8 @@ class Block extends Bitmap
 		Y = _Y;
 		x = X * size;
 		y = Y * size;
+		tx = x;
+		ty = y;
 	}
 	public function adjacentBlockChanged(block:Block){};
 	public static function getBlock(x:Int=-1,y:Int=-1):Block
@@ -30,12 +35,35 @@ class Block extends Bitmap
 	public function place()
 	{
 		X = Math.floor((x+size/2) / size);
-		Y = Math.floor((y+size/2) / size);//yay strong static typing!!!!
-		Board.d[X][Y] = this;
+		Y = Math.floor((y + size / 2) / size);//yay strong static typing!!!!
+		if(X>=0 && X<Board.w && Y>=0 && Y<Board.h)
+			Board.d[X][Y] = this;
 	}
 	public function update(delta:Float)
 	{
-		place();
+		if (x != tx || y != ty )
+		{	
+			Main.animating = true;
+			var dx = tx - x;
+			var dy = ty - y;
+			var length = Math.sqrt(dx * dx + dy * dy);
+			if (length > speed)
+			{
+				dx /= length;
+				dy /= length;
+				dx *= speed;
+				dy *= speed;
+				x += dx;
+				y += dy;
+			}
+			else
+			{
+				x = tx;
+				y = ty;
+			}
+		}
+		else
+			place();
 	}
 	public function matches(b:Block):Bool
 	{

@@ -13,6 +13,8 @@ class Explosion extends Block
 	{
 		super(_X, _Y, openfl.Assets.getBitmapData("img/explosion.png"));
 		life = _life;
+		if (Board.d[X][Y] != null)
+			Main.removeBlock(Board.d[X][Y]);
 	}
 	override public function update(delta:Float) 
 	{

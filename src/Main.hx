@@ -143,6 +143,7 @@ class Main extends Sprite
 		
 		m.blocks.remove(b);
 		m.removeChild(b);
+		Board.d[b.X][b.Y] = null;
 	}
 	function init() 
 	{
@@ -150,13 +151,15 @@ class Main extends Sprite
 		inited = true;
 		_lastTime = Lib.getTimer();
 		Board.initBoard(8, 12);
-		Board.makeRegularBoard(8, 8);
+		Board.makeRegularBoard(8, 12);
 		updateLastState();
 		y = 4 * 48;
 		x = 48;
 		objects.push(new Gravity(0, 1));
+		objects.push(new Filler(0));
 		changeCheckers.push(new FloodChecker(3));
-		Main.addObject(new ISwap(stage));
+		//Main.addObject(new ISwap(stage,1,0));
+		Main.addObject(new IRotateH(stage));
 	}
 
 	public function updateLastState()

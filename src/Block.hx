@@ -14,7 +14,7 @@ class Block extends Bitmap
 	public var ty:Float;
 	public static var primed:Array<Block>;
 	public static var size = 48;
-	public var speed = 1.0;
+	public var speed = 3.0;
 	public function new(_X:Int,_Y:Int,data:BitmapData=null) 
 	{
 		if (data == null)

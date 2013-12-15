@@ -7,6 +7,7 @@ import flash.events.MouseEvent;
 import flash.events.KeyboardEvent;
 import flash.Lib;
 import flash.display.Sprite;
+import flash.text.TextField;
 
 /**
  * ...
@@ -20,9 +21,11 @@ class Gui extends Sprite
 	var _deltaTime = 0.0;
 	var _lastTime=0.0;
 	var _speed = 1000 / 40;
-	public static var score = 0;
 	public var objectsToRemove:Array<Object_>;
 	public var objects:Array<Object_>;
+	public var comboText:TextField;
+	public var score:TextField;
+	public var addScore:TextField;
 	public function new() 
 	{
 		super();
@@ -56,6 +59,18 @@ class Gui extends Sprite
 		for (object in objectsToRemove)
 			removeObject(object);
 		objectsToRemove.splice(0, objectsToRemove.length);
+		
+		if(Main.combo>0)
+			comboText.text = Std.string(Main.nextScore) + " x" + Std.string(Main.combo);
+			else
+			comboText.text = "";
+		score.text = Std.string(Main.score);
+		StringTools.lpad(score.text, "0", 10);
+		
+		if (Main.addScore > 0)
+			addScore.text = "+" + Std.string(Main.addScore);
+			else
+			addScore.text = "";
 	}
 	function init() 
 	{
@@ -64,7 +79,33 @@ class Gui extends Sprite
 		_lastTime = Lib.getTimer();
 		y = 4 * 48;
 		x = 48;
+		var bitmap;
+		this.addChild(bitmap = new Bitmap(openfl.Assets.getBitmapData("img/border.png")));
+		bitmap.x = -x;
+		bitmap.y = -y;
+		
 		Gui.addObject(new IRotateH(stage));
+		
+		this.addChild(comboText = new TextField());
+		comboText.x = 10-x;
+		comboText.y = 80 - y;
+		comboText.scaleX = comboText.scaleY = 1.8;
+		comboText.textColor = 0xFFFFFF;
+		
+		this.addChild(score = new TextField());
+		score.x = 10-x;
+		score.y = 10 - y;
+		score.scaleX = 3;
+		score.scaleY = 3;
+		score.textColor = 0xFFFFFF;
+		
+		this.addChild(addScore = new TextField());
+		addScore.x = 20-x;
+		addScore.y = 50 - y;
+		addScore.scaleX = 2.1;
+		addScore.scaleY = 2.1;
+		addScore.textColor = 0xFFFFFF;
+		
 		//objects.push(new Filler(0));
 	}
 	function resize(e) 

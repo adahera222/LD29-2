@@ -13,6 +13,14 @@ class FloodChecker extends ChangeChecker
 		super();
 		min = _min;
 	}
+	override public function updateNextScore() 
+	{
+		super.updateNextScore();
+		for (i in Main.groups)
+		{
+			Main.nextScore += i * 100 + 100 * (i - min);
+		}
+	}
 	override public function blockChanged(block:Block) 
 	{
 		super.blockChanged(block);
@@ -37,7 +45,8 @@ class FloodChecker extends ChangeChecker
 			if (match.length >= min)
 			{
 				for(b in match)
-					Main.insertInto(Block.primed,b);
+					Main.insertInto(Block.primed, b);
+				Main.groups.push(match.length);
 			}
 	}
 }

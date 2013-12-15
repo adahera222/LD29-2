@@ -15,4 +15,5 @@ class ChangeChecker
 	{
 		
 	}
+	public function updateNextScore() { };
 }

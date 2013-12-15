@@ -19,6 +19,12 @@ class Main extends Sprite
 	var _deltaTime = 0.0;
 	var _lastTime=0.0;
 	var _speed = 1000 / 40;
+	public static var combo = 0;
+	public static var comboTimeLeft = -1;
+	public static var score = 0;
+	public static var nextScore = 0;
+	public static var addScore = 0;
+	public static var groups:Array<Int>;
 	public static var animating = false;
 	public static var wasAnimating = false;
 	
@@ -50,6 +56,7 @@ class Main extends Sprite
 		}
 		if (!animating && wasAnimating)
 		{
+			var oldGroupLength:Int = groups.length;
 			for (i in 0...Board.w)
 			{
 				for (j in 0...Board.h)
@@ -70,19 +77,49 @@ class Main extends Sprite
 					}
 				}
 			}
-			
+			if (Block.primed.length > 0)
+			{		
+				combo++;
+				comboTimeLeft = 60;
+				combo += Math.floor(Math.max(groups.length-oldGroupLength - 1,0));
+			}
+			updateNextScore();
 			while (Block.primed.length > 0)
 			{
 				var b = Block.primed.shift();
 				Main.removeBlock(b);
 				addBlock(new Explosion(b.X, b.Y,60));
 			}
-			
 			updateLastState();
 		}
 		wasAnimating = animating;
+		if (!animating)
+		{
+			comboTimeLeft--;
+			if (comboTimeLeft == 0)
+			{
+				//combo += groups.length - combo;
+				updateNextScore();
+				addScore+= nextScore * combo;
+				nextScore = 0;
+				combo = 0;
+				comboTimeLeft = -1;
+				groups.splice(0, groups.length);
+			}
+		}
+		if (addScore > 0)
+		{
+			var change:Int=Math.floor(Math.min(Math.max(Math.floor(addScore * .003), Math.floor(score*.05)),addScore));
+			score += change;
+			addScore-= change;
+		}
 	}
-
+	function updateNextScore()
+	{
+		nextScore = 0;
+		for (c in changeCheckers)
+			c.updateNextScore();
+	}
 	function resize(e) 
 	{
 		if (!inited) init();
@@ -153,6 +190,7 @@ class Main extends Sprite
 		Board.initBoard(8, 12);
 		Board.makeRegularBoard(8, 12);
 		updateLastState();
+		groups = new Array<Int>();
 		y = 4 * 48;
 		x = 48;
 		objects.push(new Gravity(0,1));

@@ -6,8 +6,8 @@ package ;
  */
 class Gravity extends Object_
 {
-	public var vx:Float;
-	public var vy:Float;
+	public var vx:Int;
+	public var vy:Int;
 	public function new(_vx,_vy) 
 	{
 		super(openfl.Assets.getBitmapData("img/none.png"));
@@ -27,16 +27,26 @@ class Gravity extends Object_
 					var b:Block = Board.d[i][j];
 					if (b != null)
 					{
-						var nx = Math.floor(b.X + vx);
-						var ny = Math.floor(b.Y + vy);
-						if(Board.isIn(nx,ny))
-							if (Board.d[nx][ny] == null)
+						var nx = Math.floor(b.X);
+						var ny = Math.floor(b.Y);
+						while (true)
+						{
+							nx += vx;
+							ny += vy;
+							if (!Board.isIn(nx, ny) || Board.d[nx][ny] != null)
 							{
-								b.tx = nx * Block.size;
-								b.ty = ny * Block.size;
-								b.place();
-								Main.animating = true;
+								nx -= vx;
+								ny -= vy;
+								if (nx != b.X || ny != b.Y)
+								{
+									b.tx = nx * Block.size;
+									b.ty = ny * Block.size;
+									b.place();
+									Main.animating = true;
+								}
+								break;
 							}
+						}
 					}
 				}
 			}

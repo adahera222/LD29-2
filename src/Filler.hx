@@ -15,46 +15,55 @@ class Filler extends Object_
 	override public function update(delta:Float) 
 	{
 		super.update(delta);
-		return;
+		if (Main.animating)
+			return;
 		switch(side)
 		{
 			case 0://top
 				for (i in 0...Board.w)
 				{
-					if (Board.d[i][0] == null)
+					var j = 0;
+					while (Board.d[i][j] == null) { j++; };
+					for (k in 0...j)
 					{
-						var b = Block.getBlock(i, -1);
-						b.ty += Block.size;
+						var b = Block.getBlock(i, -1-k);
+						b.ty = Block.size*(j-k-1);
 						Main.addBlock(b);
 					}
 				}
 			case 1://right
 				for (i in 0...Board.h)
 				{
-					if (Board.d[Board.w-1][i] == null)
+					var j = 0;
+					while (Board.d[Board.w-1-j][i] == null) { j++; };
+					for (k in 0...j)
 					{
-						var b = Block.getBlock(Board.w,i);
-						b.tx -= Block.size;
+						var b = Block.getBlock(Board.w+k,i);
+						b.tx = Board.w*Block.size-Block.size*(j-k);
 						Main.addBlock(b);
 					}
 				}
 			case 2://bottom
 				for (i in 0...Board.w)
 				{
-					if (Board.d[i][Board.h-1] == null)
+					var j = 0;
+					while (Board.d[i][Board.h-1-j] == null) { j++; };
+					for (k in 0...j)
 					{
-						var b = Block.getBlock(i,Board.h);
-						b.ty -= Block.size;
+						var b = Block.getBlock(i,Board.h+k);
+						b.ty = Board.h*Block.size-Block.size*(j-k);
 						Main.addBlock(b);
 					}
 				}
 			case 3://left
 				for (i in 0...Board.h)
 				{
-					if (Board.d[0][i] == null)
+					var j = 0;
+					while (Board.d[j][i] == null) { j++; };
+					for (k in 0...j)
 					{
-						var b = Block.getBlock(-1,i);
-						b.tx += Block.size;
+						var b = Block.getBlock(-1-k,i);
+						b.tx = Block.size*(j-k-1);
 						Main.addBlock(b);
 					}
 				}

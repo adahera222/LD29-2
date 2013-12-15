@@ -18,7 +18,7 @@ class IRotateH extends Object_
 				if(y>edge)
 					y -= Block.size;
 			case 40://down
-				if (y < Block.size * (Board.h - 0)-edge)
+				if (y < Block.size * (Board.h - 1)-edge)
 					y += Block.size;
 			case 37://left
 				var Y = Math.floor((y + 3 + Block.size / 2) / Block.size);

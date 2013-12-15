@@ -40,7 +40,8 @@ class Block extends Bitmap
 		Y = Math.floor((ty + size / 2) / size);//yay strong static typing!!!!
 		//if (X != oldX || Y != oldY)
 		{
-			Board.d[oldX][oldY] = null;
+			if(Board.isIn(oldX,oldY))
+				Board.d[oldX][oldY] = null;
 			if (Board.isIn(X, Y))
 				Board.d[X][Y] = this;
 		}

@@ -155,11 +155,10 @@ class Main extends Sprite
 		updateLastState();
 		y = 4 * 48;
 		x = 48;
-		objects.push(new Gravity(0, 1));
-		objects.push(new Filler(0));
+		objects.push(new Gravity(0,1));
+		//objects.push(new Filler(0));
 		changeCheckers.push(new FloodChecker(3));
 		//Main.addObject(new ISwap(stage,1,0));
-		Main.addObject(new IRotateH(stage));
 	}
 
 	public function updateLastState()
@@ -208,6 +207,7 @@ class Main extends Sprite
 		Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
 		Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
 		Lib.current.addChild(new Main());
+		Lib.current.addChild(new Gui());
 	}
 	public static 
 function insertInto(a:Array<Dynamic > , i:Dynamic )

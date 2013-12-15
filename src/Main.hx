@@ -90,6 +90,7 @@ class Main extends Sprite
 	}
 	function onMouseDown(e:MouseEvent) 
 	{
+		return;
 		//bitmap.x = e.localX;
 		//bitmap.y = e.localY;
 	#if html5
@@ -130,6 +131,11 @@ class Main extends Sprite
 		
 		b.place();
 	}
+	public static function addObject(b:Object_)
+	{
+		m.addChild(b);
+		m.objects.push(b);
+	}
 	public static function removeBlock(b:Block)
 	{
 		if (b == null)
@@ -150,6 +156,7 @@ class Main extends Sprite
 		x = 48;
 		objects.push(new Gravity(0, 1));
 		changeCheckers.push(new FloodChecker(3));
+		Main.addObject(new ISwap(stage));
 	}
 
 	public function updateLastState()
@@ -181,8 +188,9 @@ class Main extends Sprite
 		removeEventListener(Event.ADDED_TO_STAGE, added);
 		stage.addEventListener(Event.RESIZE, resize);
 		stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		Main.m.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		stage.removeEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 		#if ios
 		haxe.Timer.delay(init, 100); // iOS 6
 		#else

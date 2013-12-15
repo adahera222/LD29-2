@@ -13,5 +13,8 @@ class Object_ extends Bitmap
 		super(data);
 	}
 	public function update(delta:Float){}
-	
+	public function delete()
+	{
+		
+	}
 }

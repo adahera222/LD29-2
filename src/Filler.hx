@@ -26,8 +26,23 @@ class Filler extends Object_
 					while (Board.d[i][j] == null) { j++; };
 					for (k in 0...j)
 					{
-						var b = Block.getBlock(i, -1-k);
-						b.ty = Block.size*(j-k-1);
+						var b:Block = null;
+						while (true)
+						{
+							b = Block.getBlock(i, -1-k);
+							b.ty = Block.size * (j - k - 1);
+							b.place();
+							var bs = b.getAdjacentBlocks();
+							var match = false;
+							for (b2 in bs)
+								if (b2.matches(b))
+								{
+									match = true;
+									break;
+								}
+							if (!match)
+								break;
+						}
 						Main.addBlock(b);
 					}
 				}

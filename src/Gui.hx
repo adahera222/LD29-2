@@ -16,6 +16,7 @@ import flash.text.TextField;
 class Gui extends Sprite
 {
 	public static var gui:Gui;
+		var bitmap:Bitmap;
 	var inited:Bool;
 	/* ENTRY POINT */
 	var _deltaTime = 0.0;
@@ -26,6 +27,9 @@ class Gui extends Sprite
 	public var comboText:TextField;
 	public var score:TextField;
 	public var addScore:TextField;
+	public var gameover:TextField;
+	public var flash = 0;
+	public var alert = false;
 	public function new() 
 	{
 		super();
@@ -71,6 +75,25 @@ class Gui extends Sprite
 			addScore.text = "+" + Std.string(Main.addScore);
 			else
 			addScore.text = "";
+		if (alert && !Main.gameover)
+		{
+			flash--;
+			if(flash==0)
+				bitmap.bitmapData = openfl.Assets.getBitmapData("img/border.png");
+			if (flash < -30)
+			{
+				flash = 30;			
+				bitmap.bitmapData = openfl.Assets.getBitmapData("img/alert.png");
+			}
+		}
+		else
+		{
+			bitmap.bitmapData = openfl.Assets.getBitmapData("img/border.png");
+		}
+		if (Main.gameover)
+			gameover.text = "GAME OVER";
+		else
+			gameover.text = "";
 	}
 	function init() 
 	{
@@ -79,7 +102,6 @@ class Gui extends Sprite
 		_lastTime = Lib.getTimer();
 		y = 4 * 48;
 		x = 48;
-		var bitmap;
 		this.addChild(bitmap = new Bitmap(openfl.Assets.getBitmapData("img/border.png")));
 		bitmap.x = -x;
 		bitmap.y = -y;
@@ -105,6 +127,14 @@ class Gui extends Sprite
 		addScore.scaleX = 2.1;
 		addScore.scaleY = 2.1;
 		addScore.textColor = 0xFFFFFF;
+		
+		this.addChild(gameover = new TextField());
+		gameover.x = 20-x;
+		gameover.y = 300 - y;
+		gameover.scaleX = 6;
+		gameover.scaleY = 6;
+		gameover.textColor = 0xFFFFFF;
+		
 		
 		//objects.push(new Filler(0));
 	}

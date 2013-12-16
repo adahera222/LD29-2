@@ -27,6 +27,7 @@ class Main extends Sprite
 	public static var groups:Array<Int>;
 	public static var animating = false;
 	public static var wasAnimating = false;
+	public static var gameover = false;
 	
 	public var objects:Array<Object_>;
 	public var blocks:Array<Block>;
@@ -41,6 +42,14 @@ class Main extends Sprite
 		var delta = now - _lastTime;
 		_deltaTime += delta - _speed;
 		_lastTime = now;
+		if (addScore > 0)
+		{
+			var change:Int=Math.floor(Math.min(Math.max(Math.floor(addScore * .003), Math.floor(score*.05)),addScore));
+			score += change;
+			addScore-= change;
+		}
+		if (gameover)
+			return;
 		Board.clear();
 		animating = false;
 		for (block in blocks)
@@ -106,12 +115,6 @@ class Main extends Sprite
 				comboTimeLeft = -1;
 				groups.splice(0, groups.length);
 			}
-		}
-		if (addScore > 0)
-		{
-			var change:Int=Math.floor(Math.min(Math.max(Math.floor(addScore * .003), Math.floor(score*.05)),addScore));
-			score += change;
-			addScore-= change;
 		}
 	}
 	function updateNextScore()
@@ -188,13 +191,14 @@ class Main extends Sprite
 		inited = true;
 		_lastTime = Lib.getTimer();
 		Board.initBoard(8, 12);
-		Board.makeRegularBoard(8, 12);
+		Board.makeRegularBoard(8, 4);
 		updateLastState();
 		groups = new Array<Int>();
 		y = 4 * 48;
 		x = 48;
 		objects.push(new Gravity(0,1));
 		//objects.push(new Filler(0));
+		objects.push(new BottomFiller());
 		changeCheckers.push(new FloodChecker(3));
 		//Main.addObject(new ISwap(stage,1,0));
 	}
@@ -237,7 +241,17 @@ class Main extends Sprite
 		init();
 		#end
 	}
-	
+	public static function gameOver()
+	{
+		gameover = true;
+		
+				Main.m.updateNextScore();
+				addScore+= nextScore * combo;
+				nextScore = 0;
+				combo = 0;
+				comboTimeLeft = -1;
+				groups.splice(0, groups.length);
+	}
 	public static function main() 
 	{
 		Block.primed = new Array<Block>();

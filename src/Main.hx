@@ -28,6 +28,8 @@ class Main extends Sprite
 	public static var animating = false;
 	public static var wasAnimating = false;
 	public static var gameover = false;
+	public static var guiObjects:Array<Object_>;
+	var combos = true;
 	
 	public var objects:Array<Object_>;
 	public var blocks:Array<Block>;
@@ -44,7 +46,7 @@ class Main extends Sprite
 		_lastTime = now;
 		if (addScore > 0)
 		{
-			var change:Int=Math.floor(Math.min(Math.max(Math.floor(addScore * .003), Math.floor(score*.05)),addScore));
+			var change:Int=Math.floor(Math.max(Math.min(Math.max(Math.floor(addScore * .003), Math.floor(score*.05)),addScore),1));
 			score += change;
 			addScore-= change;
 		}
@@ -189,20 +191,97 @@ class Main extends Sprite
 	{
 		if (inited) return;
 		inited = true;
+		guiObjects=new Array<Object_>();
 		_lastTime = Lib.getTimer();
-		Board.initBoard(8, 12);
-		Board.makeRegularBoard(8, 4);
-		updateLastState();
 		groups = new Array<Int>();
 		y = 4 * 48;
 		x = 48;
+		var q = Math.random();
+		Board.initBoard(8, 12);
+		updateLastState();
+		if (false)
+		{
+		Board.makeRegularBoard(8, 4);
 		objects.push(new Gravity(0,1));
 		//objects.push(new Filler(0));
 		objects.push(new BottomFiller());
 		changeCheckers.push(new FloodChecker(3));
 		//Main.addObject(new ISwap(stage,1,0));
+		}
+		else
+		{
+			var dir:Int = rand([96, 0, 1, 1, 1, 2, 1, 3]);
+			var dir2:Int = dir;
+			if (rand([99.9, 1, .1, 0]) == 0)
+				dir2=rand([96, 0, 1, 1, 1, 2, 1, 3]);
+			var vx=1, vy=0,hor=true;
+			switch(dir2)
+			{
+				case 0:
+					vx = 0;
+					vy = 1;
+				case 1:
+					vx = -1;
+					vy = 0;
+					hor = false;
+				case 2:
+					vx = 0;
+					vy = -1;
+				case 3:
+					vx = 1;
+					vy = 0;
+					hor = false;
+			}
+			var fill:Int = 0;
+			if(hor)
+				Board.makeRegularBoard(rand([95, 8, 5, Math.floor(Math.random() * 8)]), fill=rand([70, 4, 40, 5, 40, 3, 20, 12, 30, 2, 30, Math.floor(Math.random() * 8) + 4]));
+			else
+				Board.makeRegularBoard(fill=rand([70, 3, 40, 2, 20, 8, 30, 1, 30, Math.floor(Math.random() * 4) + 4]), rand([95, 12, 5, Math.floor(Math.random() * 12)]));
+			
+			if (rand([95, 1, 5, 0]) == 0)
+				combos = false;
+			
+			if (rand([99.9, 1, .1, 0]) == 1)
+				objects.push(new Gravity(vx, vy));
+			
+			for(i in 0...rand([99.999,1,.0001,2]))
+			switch(rand([fill<8?95:1, 0, 5, 1]))
+			{
+				case 0:
+					objects.push(new BottomFiller());
+				case 1:
+					objects.push(new Filler(rand([99.99,dir,.001,Math.floor(Math.random()*4)])));
+			}
+			switch(rand([70, 0, 70, 1]))
+			{
+				case 0:
+					guiObjects.push(new IRotateH(stage));
+				case 1:
+					if (rand([95, 1, 5, 0]) == 1)
+						guiObjects.push(new ISwap(stage, 1, 0));
+					else
+						guiObjects.push(new ISwap(stage, 0, 1));
+				case 2:
+					guiObjects.push(new IRemove(stage));
+			}
+			switch(rand([100, 0]))
+			{
+				case 0:			
+					changeCheckers.push(new FloodChecker(rand([99,3,1,4])));
+			}
+		}
 	}
-
+	public function rand(a:Array<Float>):Int
+	{
+		var i = 0;
+		while (i<a.length)
+		{
+			if (Math.random() * 100 < a[i])
+				return Math.floor(a[i + 1]);
+			i += 2;
+		}
+		return Math.floor(a[1]);
+	}
 	public function updateLastState()
 	{
 		lastState = new Array<Array<Block>>();
@@ -256,8 +335,8 @@ class Main extends Sprite
 	{
 		Block.primed = new Array<Block>();
 		// static entry point
-		Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
-		Lib.current.stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
+		//Lib.current.stage.align = flash.display.StageAlign.TOP_LEFT;
+		Lib.current.stage.scaleMode = flash.display.StageScaleMode.EXACT_FIT;
 		Lib.current.addChild(new Main());
 		Lib.current.addChild(new Gui());
 	}

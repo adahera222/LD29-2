@@ -18,10 +18,11 @@ class IRotateH extends Object_
 				if(y>edge)
 					y -= Block.size;
 			case 40://down
-				if (y < Block.size * (Board.h - 1)-edge)
+				if (y-(Main.m.y-4 * 48) < Block.size * (Board.h - 1)-edge)
 					y += Block.size;
 			case 37://left
-				var Y = Math.floor((y + 3 + Block.size / 2) / Block.size);
+		if (Main.animating) return;
+				var Y = Math.floor((y-(Main.m.y-4 * 48) + 3 + Block.size / 2) / Block.size);
 				var moved = new Array<Block>();
 				if (Board.d[0][Y] != null)
 				{
@@ -40,7 +41,8 @@ class IRotateH extends Object_
 				for (b in moved)
 					b.place();
 			case 39://left
-				var Y = Math.floor((y + 3 + Block.size / 2) / Block.size);
+		if (Main.animating) return;
+				var Y = Math.floor((y-(Main.m.y-4 * 48) + 3 + Block.size / 2) / Block.size);
 				var moved = new Array<Block>();
 				if (Board.d[Board.w-1][Y] != null)
 				{

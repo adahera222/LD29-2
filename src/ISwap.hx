@@ -20,7 +20,7 @@ class ISwap extends Object_
 				if(y>edge)
 					y -= Block.size;
 			case 40://down
-				if (y < Block.size * (Board.h - vy)-edge)
+				if (y-(Main.m.y-4 * 48) < Block.size * (Board.h - vy)-edge)
 					y += Block.size;
 			case 37://left
 				if (x > edge)
@@ -29,8 +29,9 @@ class ISwap extends Object_
 				if (x < Block.size * (Board.w - vx)-edge)
 					x += Block.size;
 			case 32://space
+		if (Main.animating) return;
 				var X = Math.floor((x + 3 + Block.size / 2) / Block.size);
-				var Y = Math.floor((y + 3 + Block.size / 2) / Block.size);
+				var Y = Math.floor((y-(Main.m.y-4 * 48) + 3 + Block.size / 2) / Block.size);
 				var a = Board.d[X][Y];
 				var b = Board.d[X + vx][Y+vy];
 				var ax = (a!=null)?a.x:(X)*Block.size;

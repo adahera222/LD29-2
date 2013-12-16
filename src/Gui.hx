@@ -8,6 +8,8 @@ import flash.events.KeyboardEvent;
 import flash.Lib;
 import flash.display.Sprite;
 import flash.text.TextField;
+import flash.text.TextFormat;
+
 
 /**
  * ...
@@ -64,7 +66,7 @@ class Gui extends Sprite
 			removeObject(object);
 		objectsToRemove.splice(0, objectsToRemove.length);
 		
-		if(Main.combo>0)
+		if(Main.combo>1)
 			comboText.text = Std.string(Main.nextScore) + " x" + Std.string(Main.combo);
 			else
 			comboText.text = "";
@@ -95,6 +97,17 @@ class Gui extends Sprite
 		else
 			gameover.text = "";
 	}
+	function makeText(x:Float, y:Float, size:Float):TextField
+	{
+		var myText = new TextField();
+		var format:TextFormat = new TextFormat();
+		format.color = 0xFFFFFF;
+		format.size = 12*size;
+		myText.defaultTextFormat = format;
+		myText.x = x;
+		myText.y = y;
+		return myText;
+	}
 	function init() 
 	{
 		if (inited) return;
@@ -106,8 +119,13 @@ class Gui extends Sprite
 		bitmap.x = -x;
 		bitmap.y = -y;
 		
-		Gui.addObject(new IRotateH(stage));
+		for (o in Main.guiObjects)
+			addObject(o);
 		
+		this.addChild(comboText = makeText(10 - x, 80-y, 1.8));
+		this.addChild(score = makeText(10 - x, 10-y, 3));
+		this.addChild(addScore = makeText(20 - x, 50-y, 2.1));
+		this.addChild(gameover = makeText(20 - x, 300-y, 6));/*
 		this.addChild(comboText = new TextField());
 		comboText.x = 10-x;
 		comboText.y = 80 - y;
@@ -133,7 +151,7 @@ class Gui extends Sprite
 		gameover.y = 300 - y;
 		gameover.scaleX = 6;
 		gameover.scaleY = 6;
-		gameover.textColor = 0xFFFFFF;
+		gameover.textColor = 0xFFFFFF;*/
 		
 		
 		//objects.push(new Filler(0));
